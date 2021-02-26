@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_ui/models/user_model.dart';
 import 'package:social_media_ui/widgets/custom_drawer.dart';
+import 'package:social_media_ui/widgets/post_carousel.dart';
 import 'package:social_media_ui/widgets/profile_clipper.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -13,6 +14,17 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  PageController _yourPostPageController;
+  PageController _yourFavoritesPageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _yourPostPageController =
+        PageController(initialPage: 0, viewportFraction: 0.8);
+    _yourFavoritesPageController =
+        PageController(initialPage: 0, viewportFraction: 0.8);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +85,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                widget.user.name,
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.25,
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      'Following',
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    SizedBox(height: 2.0),
+                    Text(
+                      widget.user.following.toString(),
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.w600,
+                        // color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      'Followers',
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    SizedBox(height: 2.0),
+                    Text(
+                      widget.user.followers.toString(),
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.w600,
+                        // color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            PostsCarousel(
+              pageController: _yourPostPageController,
+              title: 'Your Posts',
+              posts: widget.user.posts,
+            ),
+            PostsCarousel(
+              pageController: _yourFavoritesPageController,
+              title: 'Favorites',
+              posts: widget.user.favorites,
             ),
           ],
         ),
